@@ -28,6 +28,7 @@ public class ILoginOpenServiceDTO {
         private User user;
         private boolean result;
         private String message;
+        private User User;
     }
 
     /**

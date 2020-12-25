@@ -63,7 +63,7 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
         Assert.notNull(code, ErrorMsg.ERROR_BLANK_CODE);
         String json = WxOpenIdUtil.getOpenId(code);
         String openId = String.valueOf(JSONUtil.parse(json).getByPath("openid"));
-        Assert.notNull(openId, "用户注册openId获取失败！");
+        Assert.isTrue(!openId.equals("null"), "用户注册openId获取失败！");
         user.setOpenId(openId);
         List<User> users = userService.queryUserByOpenId(user.getOpenId());
         if (users.size() > 0) {
@@ -101,6 +101,7 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
                 .builder()
                 .result(save)
                 .message(save == true ? "用户注册成功" : "用户注册失败，请联系管管理员！")
+                .user(user)
                 .build();
     }
 

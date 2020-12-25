@@ -44,7 +44,7 @@ public class LoginController {
     @PostMapping("/registWx")
     public Map<String, Object> registWx(User user, String code) {
         ILoginOpenServiceDTO.UserRegisteredWxRespDTO registeredWxRespDTO = loginOpenService.UserRegisteredWx(user, code);
-        return null;
+        return BeanUtil.beanToMap(registeredWxRespDTO);
     }
 
     /**
