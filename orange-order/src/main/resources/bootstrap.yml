@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: orange-api
+  cloud:
+    nacos:
+      config:
+        #        server-addr: 改为自己的地址
+        server-addr: localhost:8848
+        file-extension:  yaml
+      discovery:
+        #        server-addr: 改为自己的地址
+        server-addr: localhost:8848
+    sentinel:
+      transport:
+        #配置sentinel dashboard地址
+        dashboard: 改为自己的地址
+        #        dashboard: localhost:8080
+        #默认8719端口，假如被占用会自动从8719开始依次+1扫描，直至找到未被占用的端口  如果被占用添加 -Dproject.name=xxxx
+        port: 8719
+  profiles:
+    active: dev
+
+  #数据源
+#  datasource:
+#    name: mysql
+#    url: jdbc:mysql://localhost:3306/orange?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: 142857
+#  redis:
+#    host: 182.254.228.76
+#    port: 6379
+#    timeout: 4000
+#    jedis:
+#      pool:
+#        max-active: 50
+#        max-wait: 3000
+#        max-idle: 20
+#        min-idle: 5
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#解决nacos不停打印日志的问题
+logging:
+  level:
+    com.alibaba.nacos.client.config.impl: WARN
+
+#server:
+#  ssl:
+#    key-store: classpath:改为自己的地址
+#    key-store-password: 改为自己的地址
+#    keyStoreType: JKS
+#    keyAlias: tomcat
