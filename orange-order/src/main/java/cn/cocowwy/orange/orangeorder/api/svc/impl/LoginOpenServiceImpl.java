@@ -3,17 +3,17 @@ package cn.cocowwy.orange.orangeorder.api.svc.impl;
 import cn.cocowwy.orange.orangeorder.api.dto.ILoginOpenServiceDTO;
 import cn.cocowwy.orange.orangeorder.api.svc.ILoginOpenService;
 import cn.cocowwy.orange.orangeorder.entity.User;
+import cn.cocowwy.orange.orangeorder.entity.UserDetails;
+import cn.cocowwy.orange.orangeorder.service.UserDetailsService;
 import cn.cocowwy.orange.orangeorder.service.UserService;
-import cn.cocowwy.orange.orangeorder.utils.AuthCheckUtil;
-import cn.cocowwy.orange.orangeorder.utils.ErrorMsg;
-import cn.cocowwy.orange.orangeorder.utils.RandomStrategy;
-import cn.cocowwy.orange.orangeorder.utils.WxOpenIdUtil;
+import cn.cocowwy.orange.orangeorder.utils.*;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -26,6 +26,12 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NacosParam nacosParam;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     /**
      * 根据openId 用户登录接口
      * @param code
@@ -37,10 +43,12 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
         String openId = String.valueOf(JSONUtil.parse(json).getByPath("openid"));
         List<User> users = userService.queryUserByOpenId(openId);
         if (users.size() > 0) {
+            List<UserDetails> userDetails = userDetailsService.queryByUserId(users.get(0).getUserId());
             return ILoginOpenServiceDTO.IUserLoginWxRespDTO
                     .builder()
                     .message("该用户已经注册！")
                     .result(true)
+                    .userDetails(userDetails.get(0))
                     .user(users.get(0).setOpenId(null).setPassword(null))
                     .build();
         }
@@ -87,13 +95,26 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
                     .build();
         }
 
+        // 初始化注册用户信息
         // 根据自动生成策略自动生成16位userid
         Long randomUserId = RandomStrategy.getRandomUserId();
         user.setUserId(randomUserId);
+        user.setRegisteredTime(LocalDateTime.now());
+        user.setDayTradeTimes(0);
         boolean save = userService.save(user);
+        UserDetails details = UserDetails.builder()
+                .userId(randomUserId)
+                .userExp(0)
+                .orangeMoney(0)
+                .authorityTag("0")
+                .changeReason("注册账户")
+                .createTimes(nacosParam.getDayTradeTimes())
+                .build();
+
+        boolean saveDet = userDetailsService.save(details);
 
         // 记录注册失败日志
-        if (save == false) {
+        if (save == false || saveDet == false) {
             log.info("用户注册信息失败，用户注册提供信息为：" + user);
         }
 
@@ -102,6 +123,7 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
                 .result(save)
                 .message(save == true ? "用户注册成功" : "用户注册失败，请联系管管理员！")
                 .user(user)
+                .userDetails(details)
                 .build();
     }
 

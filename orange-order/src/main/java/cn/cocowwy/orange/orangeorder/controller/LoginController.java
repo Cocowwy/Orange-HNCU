@@ -47,28 +47,28 @@ public class LoginController {
         return BeanUtil.beanToMap(registeredWxRespDTO);
     }
 
-    /**
-     * 登录 该控制层废除 改为openId的方式
-     * 废弃
-     *
-     * @param username
-     * @param password
-     */
-    @PostMapping("/Login")
-    public Map<String, Object> Login(@RequestParam("username") String username, @RequestParam("password") String password) {
-        ILoginOpenServiceDTO.UserLoginMesageRespDTO userLoginMesageRespDTO = loginOpenService.UserLoginMesage(username, password);
-        return BeanUtil.beanToMap(userLoginMesageRespDTO);
-    }
-
-    /**
-     * 注册 该控制层废除 改为openId的方式
-     * 废弃
-     * @param user
-     * @return
-     */
-    @PostMapping("/registered")
-    public Map<String, Object> registered(@RequestParam("user") User user) {
-        ILoginOpenServiceDTO.UserRegistered canBeRegisteredRespDTO = loginOpenService.UserRegistered(user);
-        return BeanUtil.beanToMap(canBeRegisteredRespDTO);
-    }
+//    /**
+//     * 登录 该控制层废除 改为openId的方式
+//     * 废弃
+//     *
+//     * @param username
+//     * @param password
+//     */
+//    @PostMapping("/Login")
+//    public Map<String, Object> Login(@RequestParam("username") String username, @RequestParam("password") String password) {
+//        ILoginOpenServiceDTO.UserLoginMesageRespDTO userLoginMesageRespDTO = loginOpenService.UserLoginMesage(username, password);
+//        return BeanUtil.beanToMap(userLoginMesageRespDTO);
+//    }
+//
+//    /**
+//     * 注册 该控制层废除 改为openId的方式
+//     * 废弃
+//     * @param user
+//     * @return
+//     */
+//    @PostMapping("/registered")
+//    public Map<String, Object> registered(@RequestParam("user") User user) {
+//        ILoginOpenServiceDTO.UserRegistered canBeRegisteredRespDTO = loginOpenService.UserRegistered(user);
+//        return BeanUtil.beanToMap(canBeRegisteredRespDTO);
+//    }
 }

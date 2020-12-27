@@ -43,4 +43,10 @@ public class NacosParam {
      */
     @Value("${config.tradeLiveHours:6}")
     private Long tradeLiveHours;
+
+    /**
+     * 用户每日可派订单上限次数
+     */
+    @Value("${config.dayTradeTimes:3}")
+    private Integer dayTradeTimes;
 }

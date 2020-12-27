@@ -88,7 +88,7 @@ public class UserDetails extends Model {
     private Integer room;
 
     /**
-     * 当日订单创建次数
+     * 当日订单可创建次数
      */
     @TableField("create_times")
     private Integer createTimes;

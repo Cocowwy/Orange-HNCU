@@ -1,6 +1,7 @@
 package cn.cocowwy.orange.orangeorder.api.dto;
 
 import cn.cocowwy.orange.orangeorder.entity.User;
+import cn.cocowwy.orange.orangeorder.entity.UserDetails;
 import lombok.*;
 
 import java.io.Serializable;
@@ -28,7 +29,7 @@ public class ILoginOpenServiceDTO {
         private User user;
         private boolean result;
         private String message;
-        private User User;
+        private UserDetails userDetails;
     }
 
     /**
@@ -44,6 +45,7 @@ public class ILoginOpenServiceDTO {
         private User user;
         private boolean result;
         private String message;
+        private UserDetails userDetails;
     }
 
     /**
