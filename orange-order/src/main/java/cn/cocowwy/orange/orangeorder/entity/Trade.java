@@ -18,10 +18,10 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @Builder
 @TableName(value = "t_trade")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Trade extends Model {
-    private static final long serialVersionUID = 220312159827965859L;
+    private static final long serialVersionUID = -78724791243642734L;
 
     /**
      * 订单唯一标识id
@@ -106,6 +106,12 @@ public class Trade extends Model {
      */
     @TableField("alive_time")
     private LocalDateTime aliveTime;
+
+    /**
+     * 订单期待完成小时
+     */
+    @TableField("do_hours")
+    private Integer doHours;
 
     /**
      * 订单备注消息

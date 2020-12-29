@@ -66,7 +66,7 @@ public class TradeController {
     }
 
     /**
-     * 查询已接单记录
+     * 查询订单记录
      * @param userId
      * @return
      */

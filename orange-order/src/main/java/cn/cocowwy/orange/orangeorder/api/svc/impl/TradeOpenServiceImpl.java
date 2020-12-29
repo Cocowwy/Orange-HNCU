@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -90,8 +91,11 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
 
         // 新增默认值
         autoSetDefault.setTradeDefault(trade);
+        // 设置订单期待完成时间
+        trade.setExpectTime(LocalDateTimeUtil.offset(LocalDateTimeUtil.now(), trade.getDoHours(), ChronoUnit.HOURS));
 
-        // 入redis
+
+        // 入redis  订单在redis上的保存时间从配置中心读取
         String key = RedisUtils.getRedisKey("onLineTrade", String.valueOf(trade.getTradeId()));
         redisUtils.getJsonTemplate().opsForValue().set(key, trade, nacosParam.getTradeAliveHours(), TimeUnit.HOURS);
 
@@ -186,7 +190,7 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         temp.addAll(inTrades);
 
         // 根据userId和状态进行过滤操作
-        inTrades.stream().filter(o -> userId.equals(o.getAcceptUser()) && "1".equals(o.getStatusTag()));
+        inTrades = inTrades.stream().filter(o -> userId.equals(o.getAcceptUser()) && "1".equals(o.getStatusTag())).collect(Collectors.toList());
 
         List<Map<String, Object>> inMap = new ArrayList<>();
         for (Trade inTrade : inTrades) {
@@ -211,9 +215,18 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         }
 
         // 根据userId和状态进行过滤操作  合并online里面的派单 和accept里面的派单
-        outTrades.stream().filter(o -> userId.equals(o.getCreateUser()) && "0".equals(o.getStatusTag()));
+        outTrades = outTrades.stream().filter(o -> userId.equals(o.getCreateUser()) && "0".equals(o.getStatusTag())).collect(Collectors.toList());
         List<Trade> userOut = temp.stream().filter(o -> userId.equals(o.getCreateUser()) && "1".equals(o.getStatusTag())).collect(Collectors.toList());
         outTrades.addAll(userOut);
+
+        //对派出订单  已被接的订单设置接单人的信息  使用预留字段塞入接单人信息
+        for (Trade outTrade : outTrades) {
+            User user = userService.queryByUserId(outTrade.getAcceptUser()).get(0);
+            outTrade.setRsrvStr1(user.getName());
+            outTrade.setRsrvStr2(user.getPhone());
+            outTrade.setRsrvStr3(user.getWxId());
+        }
+
 
         return ITradeOpenServiceDTO.QueryTradeRecordsRespDTO
                 .builder()

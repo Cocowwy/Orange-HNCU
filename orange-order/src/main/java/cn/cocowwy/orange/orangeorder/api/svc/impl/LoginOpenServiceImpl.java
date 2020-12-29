@@ -91,7 +91,7 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
             return ILoginOpenServiceDTO.UserRegisteredWxRespDTO
                     .builder()
                     .result(false)
-                    .message("该微信号已其他账号绑定！")
+                    .message("该微信号已被其他账号绑定！")
                     .build();
         }
 

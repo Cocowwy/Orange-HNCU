@@ -37,7 +37,7 @@ public class AutoSetDefault {
         trade.setChangeTime(LocalDateTime.now());
         trade.setStatusTag("0");
         trade.setAliveTime(LocalDateTimeUtil.offset(LocalDateTimeUtil.now(), nacosParam.getTradeAliveHours(), ChronoUnit.HOURS));
-        trade.setExpectTime(LocalDateTimeUtil.offset(LocalDateTimeUtil.now(), nacosParam.getTradeLiveHours(), ChronoUnit.HOURS));
+//        trade.setExpectTime(LocalDateTimeUtil.offset(LocalDateTimeUtil.now(), nacosParam.getTradeLiveHours(), ChronoUnit.HOURS));
         // 以下优先用户设置信息
         trade.setTips(null == trade.getTips() ? nacosParam.getDefaultTips() : trade.getTips());
     }
