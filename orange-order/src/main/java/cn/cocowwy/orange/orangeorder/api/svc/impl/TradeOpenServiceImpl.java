@@ -221,7 +221,11 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
 
         //对派出订单  已被接的订单设置接单人的信息  使用预留字段塞入接单人信息
         for (Trade outTrade : outTrades) {
-            User user = userService.queryByUserId(outTrade.getAcceptUser()).get(0);
+            List<User> users = userService.queryByUserId(outTrade.getAcceptUser());
+            if (null == users || users.size() == 0) {
+                continue;
+            }
+            User user = users.get(0);
             outTrade.setRsrvStr1(user.getName());
             outTrade.setRsrvStr2(user.getPhone());
             outTrade.setRsrvStr3(user.getWxId());
