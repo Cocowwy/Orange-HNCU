@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author Cocowwy
- * @since 2020-12-03 14:37:51
+ * @since 2021-02-01 21:35:18
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Trade extends Model {
-    private static final long serialVersionUID = -78724791243642734L;
+    private static final long serialVersionUID = -81082730426598993L;
 
     /**
      * 订单唯一标识id
@@ -76,6 +76,12 @@ public class Trade extends Model {
      */
     @TableField("content")
     private String content;
+
+    /**
+     * 详细信息 仅对接单人可见
+     */
+    @TableField("detail_message")
+    private String detailMessage;
 
     /**
      * 订单小费
@@ -136,5 +142,17 @@ public class Trade extends Model {
      */
     @TableField("rsrv_str3")
     private String rsrvStr3;
+
+    /**
+     * 预留字段4
+     */
+    @TableField("rsrv_str4")
+    private String rsrvStr4;
+
+    /**
+     * 预留字段5
+     */
+    @TableField("rsrv_str5")
+    private String rsrvStr5;
 
 }

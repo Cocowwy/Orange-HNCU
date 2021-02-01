@@ -10,6 +10,7 @@ import cn.cocowwy.orange.orangeorder.utils.*;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Assert;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  * @author Cocowwy
  * @create 2020-12-12-17:35
  */
+@Log4j2
 @Service
 public class TradeOpenServiceImpl implements ITradeOpenService {
     @Autowired
@@ -61,9 +63,19 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         }
 
         //过滤出正常的订单
-        returnList.stream()
+        returnList = returnList.stream()
                 .filter(o -> "0".equals(o.getStatusTag()))
-                .sorted((x, y) -> x.getCreateTime().compareTo(y.getCreateTime()));
+                .sorted((x, y) -> x.getCreateTime().compareTo(y.getCreateTime())).collect(Collectors.toList());
+
+        returnList.forEach(i -> i.setDetailMessage(""));
+
+        // 模糊化 并且格式化时间
+        for (Trade trade : returnList) {
+            trade.setRsrvStr1(LocalDateTimeUtil.format(trade.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+            trade.setRsrvStr2(LocalDateTimeUtil.format(trade.getExpectTime(), "yyyy-MM-dd HH:mm:ss"));
+            trade.setDetailMessage("");
+        }
+
         return ITradeOpenServiceDTO.GetOnlineTradeRespDTO.builder().trades(returnList).build();
     }
 
@@ -99,6 +111,7 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         String key = RedisUtils.getRedisKey("onLineTrade", String.valueOf(trade.getTradeId()));
         redisUtils.getJsonTemplate().opsForValue().set(key, trade, nacosParam.getTradeAliveHours(), TimeUnit.HOURS);
 
+
         // 入数据库
         boolean save = tradeService.save(trade);
         if (!save) {
@@ -109,6 +122,7 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
                     .build();
         }
 
+        log.info("【用户：{} 创建订单成功，订单id为：{}，订单标题为：{}】", trade.getCreateUser(), trade.getTradeId(), trade.getTitle());
         return ITradeOpenServiceDTO.AddOnLineTradeRespDTO
                 .builder()
                 .result(true)
@@ -254,6 +268,7 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         acceptTrade.setStatusTag("2");
         acceptTrade.setChangeTime(LocalDateTime.now());
         tradeService.updateByTradeId(acceptTrade.getTradeId(), acceptTrade);
+        log.info("【用户：{} 完成接单，订单号为：{}】", acceptTrade.getAcceptUser(),tradeId);
 
         // redis上删除该信息
         redisUtils.rmvByKey(acceptTradeKey);
@@ -290,6 +305,7 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
 
         // 更新数据库状态
         tradeService.updateByTradeId(tradeId, acceptTrade);
+        log.info("【用户：{} 取消已接订单：{}】", acceptTrade.getCreateUser(),tradeId);
 
         return ITradeOpenServiceDTO.CancelAcceptTradeRespDTO
                 .builder()

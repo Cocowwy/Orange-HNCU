@@ -5,12 +5,14 @@ import cn.cocowwy.orange.orangeorder.api.svc.ITradeOpenService;
 import cn.cocowwy.orange.orangeorder.entity.Trade;
 import cn.cocowwy.orange.orangeorder.entity.User;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +75,13 @@ public class TradeController {
     @PostMapping("/queryTradeRecords")
     public Map<String, Object> queryTradeRecords(Long userId) {
         ITradeOpenServiceDTO.QueryTradeRecordsRespDTO queryTradeRecordsRespDTO = tradeOpenService.queryTradeRecords(userId);
+        List<Trade> outTrade = queryTradeRecordsRespDTO.getOutTrade();
+        for (Trade trade : outTrade) {
+            trade.setRsrvStr4(LocalDateTimeUtil.format(trade.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+            trade.setRsrvStr5(LocalDateTimeUtil.format(trade.getExpectTime(), "yyyy-MM-dd HH:mm:ss"));
+        }
+        queryTradeRecordsRespDTO.getInTrade().forEach(i->i.put("expTime", LocalDateTimeUtil.format((LocalDateTime)i.get("expectTime"), "yyyy-MM-dd HH:mm:ss")));
+
         return BeanUtil.beanToMap(queryTradeRecordsRespDTO);
     }
 
