@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 
 
 /**
- * @author wangwy8@asiainfo.com
- * @since 2020-12-20 23:10:23
+ * @author Cocowwy
+ * @since 2021-02-01 22:30:52
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends Model {
-    private static final long serialVersionUID = 589077273899699169L;
+    private static final long serialVersionUID = -49980848312488576L;
 
     /**
      * 用户唯一标识 id
@@ -46,6 +46,12 @@ public class User extends Model {
      */
     @TableField("open_id")
     private String openId;
+
+    /**
+     * 头像地址url
+     */
+    @TableField("avatarUrl")
+    private String avatarurl;
 
     /**
      * 用户对外展示昵称
@@ -102,16 +108,16 @@ public class User extends Model {
     private LocalDateTime suspendStartTime;
 
     /**
-     * 用户封禁结束时间
-     */
-    @TableField("suspend_end_time")
-    private LocalDateTime suspendEndTime;
-
-    /**
      * 用户最后一次登录时间
      */
     @TableField("last_login_time")
     private LocalDateTime lastLoginTime;
+
+    /**
+     * 用户封禁结束时间
+     */
+    @TableField("suspend_end_time")
+    private LocalDateTime suspendEndTime;
 
     /**
      * 用户状态 0正常  1封禁  2注销
@@ -132,16 +138,16 @@ public class User extends Model {
     private String userRealName;
 
     /**
-     * 用户性别  0女 1男
-     */
-    @TableField("sex")
-    private String sex;
-
-    /**
      * 用户可联系微信号
      */
     @TableField("wx_id")
     private String wxId;
+
+    /**
+     * 用户性别  0女 1男
+     */
+    @TableField("sex")
+    private String sex;
 
     /**
      * 用户qq
@@ -150,16 +156,16 @@ public class User extends Model {
     private String userQq;
 
     /**
-     * 预留字段1
-     */
-    @TableField("rsrv_str1")
-    private String rsrvStr1;
-
-    /**
      * 预留字段2
      */
     @TableField("rsrv_str2")
     private String rsrvStr2;
+
+    /**
+     * 预留字段1
+     */
+    @TableField("rsrv_str1")
+    private String rsrvStr1;
 
     /**
      * 预留字段3
