@@ -1,26 +1,29 @@
 spring:
   application:
-    name: orange-api
+    name: orange-wall
   cloud:
     nacos:
       config:
-        #        server-addr: 改为自己的地址
+        #        server-addr: \u6539\u4E3A\u81EA\u5DF1\u7684\u5730\u5740
         server-addr: localhost:8848
         file-extension:  yaml
       discovery:
-        #        server-addr: 改为自己的地址
+        #        server-addr: \u6539\u4E3A\u81EA\u5DF1\u7684\u5730\u5740
         server-addr: localhost:8848
     sentinel:
       transport:
-        #配置sentinel dashboard地址
-        dashboard: 改为自己的地址
+        #\u914D\u7F6Esentinel dashboard\u5730\u5740
+        dashboard: \u6539\u4E3A\u81EA\u5DF1\u7684\u5730\u5740
         #        dashboard: localhost:8080
-        #默认8719端口，假如被占用会自动从8719开始依次+1扫描，直至找到未被占用的端口  如果被占用添加 -Dproject.name=xxxx
+        #\u9ED8\u8BA48719\u7AEF\u53E3\uFF0C\u5047\u5982\u88AB\u5360\u7528\u4F1A\u81EA\u52A8\u4ECE8719\u5F00\u59CB\u4F9D\u6B21+1\u626B\u63CF\uFF0C\u76F4\u81F3\u627E\u5230\u672A\u88AB\u5360\u7528\u7684\u7AEF\u53E3  \u5982\u679C\u88AB\u5360\u7528\u6DFB\u52A0 -Dproject.name=xxxx
         port: 8719
   profiles:
     active: dev
+  mvc:
+    async:
+      request-timeout: 99999999
 
-#  数据源
+#  \u6570\u636E\u6E90
 #  datasource:
 #    name: mysql
 #    url: jdbc:mysql://localhost:3306/orange?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=Asia/Shanghai
@@ -40,14 +43,15 @@ spring:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-#解决nacos不停打印日志的问题
+#\u89E3\u51B3nacos\u4E0D\u505C\u6253\u5370\u65E5\u5FD7\u7684\u95EE\u9898
 logging:
   level:
     com.alibaba.nacos.client.config.impl: WARN
 
 #server:
 #  ssl:
-#    key-store: classpath:改为自己的地址
-#    key-store-password: 改为自己的地址
+#    key-store: classpath:\u6539\u4E3A\u81EA\u5DF1\u7684\u5730\u5740
+#    key-store-password: \u6539\u4E3A\u81EA\u5DF1\u7684\u5730\u5740
 #    keyStoreType: JKS
 #    keyAlias: tomcat
+

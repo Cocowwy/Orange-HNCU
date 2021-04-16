@@ -2,8 +2,10 @@ package cn.cocowwy.orange.orangeorder.api.svc.impl;
 
 import cn.cocowwy.orange.orangeorder.api.dto.ITradeOpenServiceDTO;
 import cn.cocowwy.orange.orangeorder.api.svc.ITradeOpenService;
+import cn.cocowwy.orange.orangeorder.entity.ReportResords;
 import cn.cocowwy.orange.orangeorder.entity.Trade;
 import cn.cocowwy.orange.orangeorder.entity.User;
+import cn.cocowwy.orange.orangeorder.service.ReportResordsService;
 import cn.cocowwy.orange.orangeorder.service.TradeService;
 import cn.cocowwy.orange.orangeorder.service.UserService;
 import cn.cocowwy.orange.orangeorder.utils.*;
@@ -46,6 +48,9 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ReportResordsService reportResordsService;
 
     /**
      * 得到在线订单列表
@@ -268,7 +273,7 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         acceptTrade.setStatusTag("2");
         acceptTrade.setChangeTime(LocalDateTime.now());
         tradeService.updateByTradeId(acceptTrade.getTradeId(), acceptTrade);
-        log.info("【用户：{} 完成接单，订单号为：{}】", acceptTrade.getAcceptUser(),tradeId);
+        log.info("【用户：{} 完成接单，订单号为：{}】", acceptTrade.getAcceptUser(), tradeId);
 
         // redis上删除该信息
         redisUtils.rmvByKey(acceptTradeKey);
@@ -305,7 +310,7 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
 
         // 更新数据库状态
         tradeService.updateByTradeId(tradeId, acceptTrade);
-        log.info("【用户：{} 取消已接订单：{}】", acceptTrade.getCreateUser(),tradeId);
+        log.info("【用户：{} 取消已接订单：{}】", acceptTrade.getCreateUser(), tradeId);
 
         return ITradeOpenServiceDTO.CancelAcceptTradeRespDTO
                 .builder()
@@ -349,5 +354,17 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
                 .result(true)
                 .message("订单号：" + tradeId + "已经成功移除！")
                 .build();
+    }
+
+    @Override
+    public void reportTrade(Long tradeId, Long userId, String reson) {
+        reportResordsService.save(ReportResords.builder()
+                .tradeId(tradeId)
+                .action("0")
+                .userId(userId)
+                .time(LocalDateTime.now())
+                .deal("0")
+                .message(reson)
+                .build());
     }
 }

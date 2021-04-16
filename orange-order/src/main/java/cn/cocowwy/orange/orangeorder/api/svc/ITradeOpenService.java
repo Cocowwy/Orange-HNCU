@@ -60,4 +60,6 @@ public interface ITradeOpenService {
      * @return
      */
     ITradeOpenServiceDTO.CancelDistributeTradeRespDTO cancelDistributeTrade(Long tradeId);
+
+    void reportTrade(Long tradeId, Long userId, String reson);
 }

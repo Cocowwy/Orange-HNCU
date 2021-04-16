@@ -80,7 +80,7 @@ public class TradeController {
             trade.setRsrvStr4(LocalDateTimeUtil.format(trade.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
             trade.setRsrvStr5(LocalDateTimeUtil.format(trade.getExpectTime(), "yyyy-MM-dd HH:mm:ss"));
         }
-        queryTradeRecordsRespDTO.getInTrade().forEach(i->i.put("expTime", LocalDateTimeUtil.format((LocalDateTime)i.get("expectTime"), "yyyy-MM-dd HH:mm:ss")));
+        queryTradeRecordsRespDTO.getInTrade().forEach(i -> i.put("expTime", LocalDateTimeUtil.format((LocalDateTime) i.get("expectTime"), "yyyy-MM-dd HH:mm:ss")));
 
         return BeanUtil.beanToMap(queryTradeRecordsRespDTO);
     }
@@ -116,5 +116,16 @@ public class TradeController {
     public Map<String, Object> cancelDistributeTrade(Long tradeId) {
         ITradeOpenServiceDTO.CancelDistributeTradeRespDTO cancelDistributeTradeRespDTO = tradeOpenService.cancelDistributeTrade(tradeId);
         return BeanUtil.beanToMap(cancelDistributeTradeRespDTO);
+    }
+
+    /**
+     * 用户举报订单接口
+     * @param tradeId
+     * @param userId
+     * @param reson
+     */
+    @PostMapping("/reportTrade")
+    public void reportTrade(Long tradeId, Long userId, String reson) {
+        tradeOpenService.reportTrade(tradeId, userId, reson);
     }
 }
