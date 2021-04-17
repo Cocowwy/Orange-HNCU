@@ -1,6 +1,8 @@
 package cn.cocowwy.orange.orangeorder.controller;
 
 import cn.cocowwy.orange.orangeorder.entity.User;
+import cn.cocowwy.orange.orangeorder.entity.UserDetails;
+import cn.cocowwy.orange.orangeorder.service.UserDetailsService;
 import cn.cocowwy.orange.orangeorder.service.UserService;
 import cn.hutool.core.collection.ListUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +26,16 @@ public class UserControlller {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserDetailsService userDetailsService;
+
     @PostMapping("/getUserMessage")
     private User getUserMessage(@RequestBody Long userId) {
-        System.out.println(userId);
         return CollectionUtils.lastElement(userService.queryByUserId(userId));
     }
 
+    @PostMapping("/getUserDetailsMessage")
+    private UserDetails getUserDetailsMessage(@RequestBody Long userId) {
+        return CollectionUtils.lastElement(userDetailsService.queryByUserId(userId));
+    }
 }

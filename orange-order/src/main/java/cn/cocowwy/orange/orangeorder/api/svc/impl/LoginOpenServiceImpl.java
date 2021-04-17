@@ -105,7 +105,7 @@ public class LoginOpenServiceImpl implements ILoginOpenService {
         UserDetails details = UserDetails.builder()
                 .userId(randomUserId)
                 .userExp(0)
-                .orangeMoney(0)
+                .orangeMoney(0D)
                 .authorityTag("0")
                 .changeReason("注册账户")
                 .createTimes(nacosParam.getDayTradeTimes())

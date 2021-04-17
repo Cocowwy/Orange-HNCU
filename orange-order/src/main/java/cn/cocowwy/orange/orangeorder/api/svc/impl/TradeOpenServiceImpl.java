@@ -116,7 +116,6 @@ public class TradeOpenServiceImpl implements ITradeOpenService {
         String key = RedisUtils.getRedisKey("onLineTrade", String.valueOf(trade.getTradeId()));
         redisUtils.getJsonTemplate().opsForValue().set(key, trade, nacosParam.getTradeAliveHours(), TimeUnit.HOURS);
 
-
         // 入数据库
         boolean save = tradeService.save(trade);
         if (!save) {

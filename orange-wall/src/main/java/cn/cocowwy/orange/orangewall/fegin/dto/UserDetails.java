@@ -1,4 +1,4 @@
-package cn.cocowwy.orange.orangeorder.entity;
+package cn.cocowwy.orange.orangewall.fegin.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

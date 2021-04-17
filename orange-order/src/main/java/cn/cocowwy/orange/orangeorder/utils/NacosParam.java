@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * 提供对Nacos上配置信息的读取
  * 该类只能通过注入的方式获取！！
  * 不然读取到的值为null
- * 并且取值仅通过setter的方式
+ * 并且取值仅通过getter的方式
  * 只能够通过get的方式获取，注入之后直接取值也为null
  * 故该类所有字段必须以private的方式
  *@author Cocowwy

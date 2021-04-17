@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author Cocowwy
- * @since 2021-04-16 23:58:18
+ * @since 2021-04-17 11:23:48
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TOrangeWall extends Model {
-    private static final long serialVersionUID = 962514035866866647L;
+    private static final long serialVersionUID = 177720215976057447L;
 
     /**
      * 上墙唯一标识id
@@ -37,6 +37,12 @@ public class TOrangeWall extends Model {
     private Long createUser;
 
     /**
+     * 题目
+     */
+    @TableField("title")
+    private String title;
+
+    /**
      * 开始时间
      */
     @TableField("start_time")
@@ -47,12 +53,6 @@ public class TOrangeWall extends Model {
      */
     @TableField("end_time")
     private LocalDateTime endTime;
-
-    /**
-     * 状态 0正常 1到期  2举报 3封禁
-     */
-    @TableField("status_tag")
-    private String statusTag;
 
     /**
      * 类型  0招新  1表白   2公告   3广告  4其它
@@ -83,13 +83,13 @@ public class TOrangeWall extends Model {
      * 所花费的橙币数量
      */
     @TableField("consume")
-    private LocalDateTime consume;
+    private Double consume;
 
     /**
      * 记录点赞的用户id 数组
      */
     @TableField("like")
-    private LocalDateTime like;
+    private String like;
 
     /**
      * 记录评论的用户信息  json  用户昵称  评论时间
@@ -98,10 +98,10 @@ public class TOrangeWall extends Model {
     private String comment;
 
     /**
-     * 预留字段1
+     * 状态 0正常 1到期  2举报 3封禁
      */
-    @TableField("rsrv_str1")
-    private String rsrvStr1;
+    @TableField("status_tag")
+    private String statusTag;
 
     /**
      * 预留字段2
@@ -116,9 +116,9 @@ public class TOrangeWall extends Model {
     private String rsrvStr3;
 
     /**
-     * 预留字段4
+     * 预留字段1
      */
-    @TableField("rsrv_str4")
-    private String rsrvStr4;
+    @TableField("rsrv_str1")
+    private String rsrvStr1;
 
 }
